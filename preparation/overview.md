@@ -175,7 +175,8 @@ For the pattern database, each cube state is decomposed into:
 - **BFS**: `unordered_map<T, bool, H> visited` + `unordered_map<T, MOVE, H> move_done` (back-pointers)
 - **IDA***: Same visited/move_done maps + `priority_queue<pair<Node, int>>` ordered by `f(n) = depth + estimate`
 
-<img width="886" height="653" alt="image" src="https://github.com/user-attachments/assets/032deb16-fccd-4a14-aa49-7fa09553bf4c" />
+<img width="1849" height="1613" alt="image" src="https://github.com/user-attachments/assets/616e9e8e-e57a-48f1-b4d1-2cfa94b27dbf" />
+
 
 
 ---
