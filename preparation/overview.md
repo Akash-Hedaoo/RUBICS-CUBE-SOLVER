@@ -117,19 +117,8 @@ The system follows a layered architecture with four major components:
 
 4. **Scanner Layer** (`Scanner/`): `CubeScanner` wraps OpenCV's `VideoCapture`, providing webcam-based face scanning with HSV color classification and median filtering.
 
-```mermaid
-flowchart LR
-    User -->|Webcam| Scanner["Scanner\n(CubeScanner)"]
-    Scanner -->|setColor()| Model["Model\n(RubiksCubeBitboard)"]
-    Model -->|State queries| Solver["Solver\n(IDAstarSolver)"]
-    Solver -->|getNumMoves()| PDB["PatternDatabase\n(CornerPatternDatabase)"]
-    PDB -->|Lehmer rank| Indexer["PermutationIndexer"]
-    PDB -->|4-bit lookup| NibbleArray["NibbleArray\n(~50 MB)"]
-    NibbleArray -->|fromFile()| DiskDB["Databases/\ncornerDepth5V1.txt"]
-    Solver -->|Solution moves| User
-```
+<img width="2603" height="205" alt="image" src="https://github.com/user-attachments/assets/452b7e60-dc3b-4b9f-8481-d03dd34fcb74" />
 
----
 
 ## 8. Module and Folder Map
 
@@ -186,31 +175,8 @@ For the pattern database, each cube state is decomposed into:
 - **BFS**: `unordered_map<T, bool, H> visited` + `unordered_map<T, MOVE, H> move_done` (back-pointers)
 - **IDA***: Same visited/move_done maps + `priority_queue<pair<Node, int>>` ordered by `f(n) = depth + estimate`
 
-```mermaid
-erDiagram
-    CUBE_STATE {
-        uint64_t bitboard_6_faces
-        char color_54_stickers
-    }
-    CORNER_CONFIG {
-        uint8_t permutation_index
-        uint8_t orientation_7x3
-        uint32_t database_index
-    }
-    PATTERN_DATABASE {
-        NibbleArray entries_100M
-        uint8_t min_moves_per_corner
-    }
-    SEARCH_STATE {
-        map visited
-        map move_done_backpointers
-        priority_queue open_set
-    }
+<img width="886" height="653" alt="image" src="https://github.com/user-attachments/assets/032deb16-fccd-4a14-aa49-7fa09553bf4c" />
 
-    CUBE_STATE ||--|| CORNER_CONFIG : "getCornerIndex + getCornerOrientation"
-    CORNER_CONFIG ||--|| PATTERN_DATABASE : "getDatabaseIndex → getNumMoves"
-    CUBE_STATE ||--o{ SEARCH_STATE : "stored as visited/backpointer keys"
-```
 
 ---
 
