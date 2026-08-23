@@ -68,34 +68,8 @@ The primary user journey in the active (uncommented) code path is: **scan a phys
 - **Step 7**: Database file missing or corrupt → either `fromFile()` returns false (unhandled) or throws "Database corrupt!".
 - **Step 8**: Very deep scrambles (>13 moves) may take excessive time or memory in the IDA* priority queue.
 
-```mermaid
-sequenceDiagram
-    participant User
-    participant Main as main.cpp
-    participant Scanner as CubeScanner
-    participant Cube as RubiksCubeBitboard
-    participant Solver as IDAstarSolver
-    participant DB as CornerPatternDatabase
+<img width="1807" height="1043" alt="image" src="https://github.com/user-attachments/assets/a7ffbdb1-2685-40c6-a6ce-6439d29ae97b" />
 
-    User->>Main: Launch executable
-    Main->>Scanner: CubeScanner(0) — open webcam
-    loop For each of 6 faces
-        Scanner->>User: Show grid overlay on camera feed
-        User->>Scanner: Press SPACE to capture
-        Scanner->>Scanner: medianColor() + classifyColor() per cell
-        Scanner->>User: Show detected colors
-        User->>Scanner: Press N to confirm / R to rescan
-        Scanner->>Cube: setColor(face, row, col, color)
-    end
-    Main->>Solver: IDAstarSolver(cube, fileName)
-    Solver->>DB: fromFile("Databases/cornerDepth5V1.txt")
-    DB-->>Solver: ~88M entries loaded
-    Solver->>Solver: IDA* search with cornerDB heuristic
-    Solver-->>Main: vector<MOVE> solution
-    Main->>User: Print solution moves to console
-```
-
----
 
 ## 5. Feature Breakdown
 
